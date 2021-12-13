@@ -1,11 +1,7 @@
+import { AbstractService } from 'src/common/abstract.service';
 import { Repository } from 'typeorm';
 import { Role } from './role.entity';
-export declare class RoleService {
+export declare class RoleService extends AbstractService {
     private readonly roleRepository;
     constructor(roleRepository: Repository<Role>);
-    all(): Promise<Role[]>;
-    create(data: any): Promise<Role>;
-    findone(condition: any): Promise<Role>;
-    update(id: number, data: any): Promise<any>;
-    delete(id: number): Promise<any>;
 }

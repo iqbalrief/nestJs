@@ -3,6 +3,7 @@ import {
     Get, Put, Delete,
     Param, Body, Post 
 } from '@nestjs/common';
+import { HasPermission } from 'src/permission/has-permission.decorator';
 import { RoleService } from './role.service';
 
 
@@ -13,11 +14,13 @@ export class RoleController {
     }
 
     @Get()
+    @HasPermission('roles')
     async all() {
     return this.roleService.all();
     }
 
     @Post()
+    @HasPermission('roles')
     async create(
         @Body('name') name: string,
         @Body('permissions') ids: number[]
@@ -36,8 +39,9 @@ export class RoleController {
     }
 
     @Get(':id')
+    @HasPermission('roles')
     async get(@Param('id') id: number) {
-        return this.roleService.findone({id});
+        return this.roleService.findone({id}, ['permissions']);
     }
 
     @Put(':id')
@@ -57,6 +61,7 @@ export class RoleController {
     }
 
     @Delete(':id')
+    @HasPermission('roles')
     async delete(@Param('id') id: number) {
         return this.roleService.delete(id);
     }

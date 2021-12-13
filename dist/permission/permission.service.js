@@ -15,14 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PermissionService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const abstract_service_1 = require("../common/abstract.service");
 const typeorm_2 = require("typeorm");
 const permission_entity_1 = require("./permission.entity");
-let PermissionService = class PermissionService {
+let PermissionService = class PermissionService extends abstract_service_1.AbstractService {
     constructor(permissionRepository) {
+        super(permissionRepository);
         this.permissionRepository = permissionRepository;
-    }
-    async all() {
-        return this.permissionRepository.find();
     }
 };
 PermissionService = __decorate([

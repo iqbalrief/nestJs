@@ -1,41 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AbstractService } from 'src/common/abstract.service';
+import { PaginatedResult } from 'src/common/paginated-result.interface';
 import { Repository } from 'typeorm';
 import { User } from './models/user.entity';
 
 @Injectable()
-export class UserService {
+export class UserService extends AbstractService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>
     ) {
-    }   
-    async all(): Promise<User[]> {
-        return this.userRepository.find();
+        super(userRepository);
     }
 
-    async paginate(page = 1) : Promise<any> {
-        const take = 15;
+  /*   async all(): Promise<User[]> {
+        return this.userRepository.find();
+    } */
 
-        const [users, total] = await this.userRepository.findAndCount({
-            take,
-            skip: (page - 1) * take
-        });
+    async paginate(page = 1, relations: any[] = []) : Promise<PaginatedResult> {
+        const {data, meta} = await super.paginate(page, relations);
+        
 
         return {
-            data: users.map(user => {
+            data: data.map(user => {
                 const {password, ...data} = user;
-
                 return data;
             }),
-            meta: {
-                total,
-                page,
-                last_page: Math.ceil(total / take)
-            }
+            meta
         }
     }
 
-    async create(data): Promise<User> {
+
+   /*  async create(data): Promise<User> {
         return this.userRepository.save(data);
     }
 
@@ -49,5 +45,5 @@ export class UserService {
 
     async delete(id: number): Promise<any> {
         return this.userRepository.delete(id)
-    }
-}  
+    } */
+}

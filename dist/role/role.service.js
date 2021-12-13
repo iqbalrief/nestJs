@@ -15,26 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoleService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const abstract_service_1 = require("../common/abstract.service");
 const typeorm_2 = require("typeorm");
 const role_entity_1 = require("./role.entity");
-let RoleService = class RoleService {
+let RoleService = class RoleService extends abstract_service_1.AbstractService {
     constructor(roleRepository) {
+        super(roleRepository);
         this.roleRepository = roleRepository;
-    }
-    async all() {
-        return this.roleRepository.find();
-    }
-    async create(data) {
-        return this.roleRepository.save(data);
-    }
-    async findone(condition) {
-        return this.roleRepository.findOne(condition, { relations: ['permissions'] });
-    }
-    async update(id, data) {
-        return this.roleRepository.update(id, data);
-    }
-    async delete(id) {
-        return this.roleRepository.delete(id);
     }
 };
 RoleService = __decorate([

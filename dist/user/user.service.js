@@ -26,44 +26,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const abstract_service_1 = require("../common/abstract.service");
+const paginated_result_interface_1 = require("../common/paginated-result.interface");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./models/user.entity");
-let UserService = class UserService {
+let UserService = class UserService extends abstract_service_1.AbstractService {
     constructor(userRepository) {
+        super(userRepository);
         this.userRepository = userRepository;
     }
-    async all() {
-        return this.userRepository.find();
-    }
-    async paginate(page = 1) {
-        const take = 15;
-        const [users, total] = await this.userRepository.findAndCount({
-            take,
-            skip: (page - 1) * take
-        });
+    async paginate(page = 1, relations = []) {
+        const { data, meta } = await super.paginate(page, relations);
         return {
-            data: users.map(user => {
+            data: data.map(user => {
                 const { password } = user, data = __rest(user, ["password"]);
                 return data;
             }),
-            meta: {
-                total,
-                page,
-                last_page: Math.ceil(total / take)
-            }
+            meta
         };
-    }
-    async create(data) {
-        return this.userRepository.save(data);
-    }
-    async findone(condition) {
-        return this.userRepository.findOne(condition);
-    }
-    async update(id, data) {
-        return this.userRepository.update(id, data);
-    }
-    async delete(id) {
-        return this.userRepository.delete(id);
     }
 };
 UserService = __decorate([
